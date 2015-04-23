@@ -11,19 +11,19 @@ var init = function(containerId) {
         scene = new THREE.Scene();
         id = containerID.replace("Body", "");
         container = document.getElementById(containerID);
-        camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 10000);
-        camera.position.set(0, -250, 100 );
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
+        camera.position.set(0, -240, 1 );
         camera.lookAt(scene.position);
         scene.add(camera);
 
         // Light
         var light = new THREE.PointLight(0xfffff3, 0.8);
-	        light.position.set(-100,200,100);
+	          light.position.set(-100,200,100);
             scene.add(light);
-            var light2 = new THREE.PointLight(0xd7f0ff, 0.2);
+        var light2 = new THREE.PointLight(0xd7f0ff, 0.2);
             light2.position.set(200,200,100);
             scene.add(light2);
-            var light3 = new THREE.PointLight(0xFFFFFF, 0.5);
+        var light3 = new THREE.PointLight(0xFFFFFF, 0.5);
             light3.position.set(150,200,-100);
             scene.add(light3);
         var light4 = new THREE.PointLight(0xFFFFFF, 0.5);
@@ -32,19 +32,16 @@ var init = function(containerId) {
 
 
         // Controls
-
         controls = new THREE.TrackballControls(camera);
         controls.rotateSpeed = 10;
   			controls.zoomSpeed = 1.2;
   			controls.panSpeed = 0.8;
   			controls.noZoom = false;
   			controls.noPan = false;
-        controls.maxDistance = 150;
-        controls.minDistance = 50;
+        controls.maxDistance = 60;
+        controls.minDistance = 10;
         controls.keys = [ 65, 83, 68 ];
 				controls.addEventListener( 'change', render );
-
-
 
 
         // Model
@@ -78,7 +75,7 @@ var init = function(containerId) {
             prepareCol( collada, "leg_left" );
         }, onProgress, onError );
 
-        renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer = new THREE.WebGLRenderer();
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(800, 800);
         renderer.setClearColor(0xffffff, 1);
@@ -203,7 +200,7 @@ var init = function(containerId) {
         dae.name = name;
       //  dae.position.set(0,-30,-5);//x,z,y- if you think in blender dimensions ;)
       //  dae.position.set(0,0,0);
-        dae.scale.set(3,3,3);
+      //  dae.scale.set(3,3,3);
         dae.traverse(function(child) {
              if(child instanceof THREE.Mesh) {
                child.material.color = normalColor;
