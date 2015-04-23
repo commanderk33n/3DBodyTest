@@ -12,11 +12,12 @@ var init = function(containerId) {
         id = containerID.replace("Body", "");
         container = document.getElementById(containerID);
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
-        camera.position.set(0, -240, 1 );
-        camera.lookAt(scene.position);
-        scene.add(camera);
+        camera.position.set(0, -55, 0.1);
+        camera.aspect = 1;
+        camera.updateProjectionMatrix();
+        scene.add();
 
-        // Light
+        // Lights
         var light = new THREE.PointLight(0xfffff3, 0.8);
 	          light.position.set(-100,200,100);
             scene.add(light);
@@ -30,19 +31,17 @@ var init = function(containerId) {
             light4.position.set(50,-150,100);
             scene.add(light4);
 
-
         // Controls
         controls = new THREE.TrackballControls(camera);
-        controls.rotateSpeed = 10;
+        controls.rotateSpeed = 5;
   			controls.zoomSpeed = 1.2;
-  			controls.panSpeed = 0.8;
+  			controls.panSpeed = 0.1;
   			controls.noZoom = false;
   			controls.noPan = false;
-        controls.maxDistance = 60;
+        controls.staticMoving = true;
+        controls.maxDistance = 55;
         controls.minDistance = 10;
         controls.keys = [ 65, 83, 68 ];
-				controls.addEventListener( 'change', render );
-
 
         // Model
         var onProgress = function ( xhr ) {
@@ -90,10 +89,7 @@ var init = function(containerId) {
         raycaster = new THREE.Raycaster();
         mouse = new THREE.Vector2();
 
-        camera.aspect = 1;
-        camera.updateProjectionMatrix();
         animate();
-        render();
 
         activColor = new THREE.Color(0.55,0.14,0.14);
         normalColor = new THREE.Color(1,0.83,0.61);
@@ -118,7 +114,6 @@ var init = function(containerId) {
         scene.children[part].traverse( function ( child ) {
             if (child instanceof THREE.Mesh) {
                 // Texture must be changed
-                //  console.log(scene);
                 if(child.material.color == activColor) {
                     // Texture2 is already equipped, unequip it
                     child.material.color = normalColor;
@@ -126,7 +121,6 @@ var init = function(containerId) {
                 } else {
                     // Equip texture2
                     child.material.color = activColor;
-                    //  console.log(scene);
                     save(true);
                 }
             }
@@ -216,14 +210,6 @@ var init = function(containerId) {
         renderer.render(scene, camera);
         controls.update();
     }
-
-    function render() {
-
-				renderer.render( scene, camera );
-        camera.updateProjectionMatrix();
-
-
-			}
 
     init(containerId);
 };
