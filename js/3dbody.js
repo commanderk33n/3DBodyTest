@@ -12,10 +12,11 @@ var init = function(containerId) {
         id = containerID.replace("Body", "");
         container = document.getElementById(containerID);
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
-        camera.position.set(0, -55, 0.1);
+        camera.position.set(0, -40, 1);
         camera.aspect = 1;
         camera.updateProjectionMatrix();
-        scene.add();
+        camera.lookAt(scene.position);
+        scene.add(camera);
 
         // Lights
         var light = new THREE.PointLight(0xfffff3, 0.8);
@@ -33,15 +34,14 @@ var init = function(containerId) {
 
         // Controls
         controls = new THREE.TrackballControls(camera);
-        controls.rotateSpeed = 5;
+        controls.rotateSpeed = 10;
   			controls.zoomSpeed = 1.2;
-  			controls.panSpeed = 0.1;
+  			controls.panSpeed = 1;
   			controls.noZoom = false;
   			controls.noPan = false;
         controls.staticMoving = true;
-        controls.maxDistance = 55;
+        controls.maxDistance = 40;
         controls.minDistance = 10;
-        controls.keys = [ 65, 83, 68 ];
 
         // Model
         var onProgress = function ( xhr ) {
@@ -80,27 +80,22 @@ var init = function(containerId) {
         renderer.setClearColor(0xffffff, 1);
         container.appendChild(renderer.domElement);
 
-
         document.addEventListener("mouseover", function(e) {
-            checkBodyActive(e);
+           checkBodyActive(e);
         }, false);
         document.addEventListener("click", onClick, false);
-
         raycaster = new THREE.Raycaster();
         mouse = new THREE.Vector2();
-
         animate();
-
         activColor = new THREE.Color(0.55,0.14,0.14);
         normalColor = new THREE.Color(1,0.83,0.61);
 
     }
 
-    function checkBodyActive(event) {
+   function checkBodyActive(event) {
         // Checks, if the current body is active
         if(document.elementFromPoint(event.clientX, event.clientY) == renderer.domElement) {
             controls.enabled = true;
-            animate();
             return true;
         }
         else {
@@ -119,7 +114,7 @@ var init = function(containerId) {
                     child.material.color = normalColor;
                     save(false);
                 } else {
-                    // Equip texture2
+                    // Equip Texture2
                     child.material.color = activColor;
                     save(true);
                 }
@@ -151,7 +146,6 @@ var init = function(containerId) {
         if(checkBodyActive(event) == false) {
             return;
         }
-
         mouse.x = (getOffset(event).x / renderer.domElement.width) * 2 - 1;
         mouse.y = -(getOffset(event).y / renderer.domElement.height) * 2 + 1;
 
@@ -187,15 +181,13 @@ var init = function(containerId) {
         return { x: x, y: y };
     }
 
-    function prepareCol(collada, name){
-        // General configuration of the .obj files while loading
-        var dae = collada.scene;
-      //  var skin = collada.skins[ 0 ];
-        dae.name = name;
-      //  dae.position.set(0,-30,-5);//x,z,y- if you think in blender dimensions ;)
-      //  dae.position.set(0,0,0);
-      //  dae.scale.set(3,3,3);
-        dae.traverse(function(child) {
+    function prepareCol(collada, name) {
+       // General configuration of the .obj files while loading
+       var dae = collada.scene;
+       //  var skin = collada.skins[ 0 ];
+       dae.name = name;
+       dae.position.set(0,0,-5);
+       dae.traverse(function(child) {
              if(child instanceof THREE.Mesh) {
                child.material.color = normalColor;
              }
@@ -207,8 +199,8 @@ var init = function(containerId) {
         // On every frame we need to calculate the new camera position
         // and have it look exactly at the center of our scene.
         requestAnimationFrame(animate);
-        renderer.render(scene, camera);
         controls.update();
+        renderer.render(scene, camera);
     }
 
     init(containerId);
