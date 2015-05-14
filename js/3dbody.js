@@ -4,19 +4,23 @@ var init = function(containerId) {
     var id;
     var camera, scene, renderer;
     var mouse, raycaster, controls, hemiLight;
-    var color1, color2;
+
 
     function init(containerID) {
         // Will setup all needed variables
         scene = new THREE.Scene();
         id = containerID.replace("Body", "");
         container = document.getElementById(containerID);
-        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
-        camera.position.set(0, -40, 1);
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+        camera.position.z = 50;
         camera.aspect = 1;
-        camera.updateProjectionMatrix();
-        camera.lookAt(scene.position);
         scene.add(camera);
+        camera.lookAt(new THREE.Vector3(0,0,0));
+
+        // Helpers
+        //axes
+        var axes = new THREE.AxisHelper(100);
+        scene.add(axes);
 
         // Lights
         var light = new THREE.PointLight(0xfffff3, 0.8);
@@ -33,15 +37,18 @@ var init = function(containerId) {
             scene.add(light4);
 
         // Controls
-        controls = new THREE.TrackballControls(camera);
-        controls.rotateSpeed = 10;
-  			controls.zoomSpeed = 1.2;
-  			controls.panSpeed = 1;
-  			controls.noZoom = false;
-  			controls.noPan = false;
+        controls = new THREE.TrackballControls( camera );
+        controls.rotateSpeed = 1.2;
+        controls.zoomSpeed = 0.8;
+        controls.panSpeed = 0.4;
+        controls.noZoom = false;
+        controls.noPan = false;
         controls.staticMoving = true;
-        controls.maxDistance = 40;
+        controls.dynamicDampingFactor = 0.3;
         controls.minDistance = 10;
+        controls.maxDistance = 55;
+        controls.keys = [ 65, 83, 68 ];
+        controls.addEventListener( 'change', render );
 
         // Model
         var onProgress = function ( xhr ) {
@@ -80,28 +87,16 @@ var init = function(containerId) {
         renderer.setClearColor(0xffffff, 1);
         container.appendChild(renderer.domElement);
 
-        document.addEventListener("mouseover", function(e) {
-           checkBodyActive(e);
-        }, false);
+
+
+
         document.addEventListener("click", onClick, false);
         raycaster = new THREE.Raycaster();
         mouse = new THREE.Vector2();
-        animate();
         activColor = new THREE.Color(0.55,0.14,0.14);
         normalColor = new THREE.Color(1,0.83,0.61);
-
-    }
-
-   function checkBodyActive(event) {
-        // Checks, if the current body is active
-        if(document.elementFromPoint(event.clientX, event.clientY) == renderer.domElement) {
-            controls.enabled = true;
-            return true;
-        }
-        else {
-            controls.enabled = false;
-            return false;
-        }
+      
+        animate();
     }
 
     function changeTexture(part) {
@@ -143,9 +138,7 @@ var init = function(containerId) {
 
     function onClick(event) {
         // Mouse-Click-Event, used to check if intersects where hit
-        if(checkBodyActive(event) == false) {
-            return;
-        }
+
         mouse.x = (getOffset(event).x / renderer.domElement.width) * 2 - 1;
         mouse.y = -(getOffset(event).y / renderer.domElement.height) * 2 + 1;
 
@@ -158,6 +151,7 @@ var init = function(containerId) {
                 if (scene.children[j].name == name) {
                     // Found same model as the intersects, change texture
                     changeTexture(j);
+                    render();
                 }
             }
         }
@@ -186,7 +180,8 @@ var init = function(containerId) {
        var dae = collada.scene;
        //  var skin = collada.skins[ 0 ];
        dae.name = name;
-       dae.position.set(0,0,-5);
+       dae.position.set(0, -10, 0);
+       dae.rotation.set( -Math.PI * 0.5, 0, 0 );
        dae.traverse(function(child) {
              if(child instanceof THREE.Mesh) {
                child.material.color = normalColor;
@@ -196,11 +191,14 @@ var init = function(containerId) {
     }
 
     function animate() {
-        // On every frame we need to calculate the new camera position
-        // and have it look exactly at the center of our scene.
-        requestAnimationFrame(animate);
-        controls.update();
-        renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+      controls.update();
+      camera.updateProjectionMatrix();
+      renderer.render(scene, camera);
+    }
+
+    function render() {
+      renderer.render( scene, camera );
     }
 
     init(containerId);
