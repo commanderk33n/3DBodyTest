@@ -23,19 +23,24 @@ var init = function(containerId) {
         scene.add(axes);
 
         // Lights
-        var light = new THREE.PointLight(0xfffff3, 0.8);
-	          light.position.set(-100,200,100);
-            scene.add(light);
-        var light2 = new THREE.PointLight(0xd7f0ff, 0.2);
-            light2.position.set(200,200,100);
-            scene.add(light2);
-        var light3 = new THREE.PointLight(0xFFFFFF, 0.5);
-            light3.position.set(150,200,-100);
-            scene.add(light3);
-        var light4 = new THREE.PointLight(0xFFFFFF, 0.5);
-            light4.position.set(50,-150,100);
-            scene.add(light4);
-
+        var light;
+        light = new THREE.PointLight(0xfffff3, 0.8);
+        light.position.set(0,0,100);
+        light = new THREE.PointLight(0xd7f0ff, 0.2);
+        light.position.set(0,0,-100);
+        scene.add(light);
+        light = new THREE.PointLight(0xFFFFFF, 0.5);
+        light.position.set(100,0,0);
+        scene.add(light);
+        light = new THREE.PointLight(0xFFFFFF, 0.5);
+        light.position.set(-100,0,0);
+        scene.add(light);
+        light = new THREE.PointLight(0xFFFFFF, 0.5);
+        light.position.set(0,100,0);
+        scene.add(light);
+        light = new THREE.PointLight(0xFFFFFF, 0.5);
+        light.position.set(0,-100,0);
+        scene.add(light);
 
 
         // Model
@@ -53,21 +58,52 @@ var init = function(containerId) {
         loader.load( 'objects/head.dae',  function ( collada ) {
             prepareCol( collada, "head" );
         }, onProgress, onError );
-        loader.load( 'objects/torso.dae', function ( collada ) {
-            prepareCol( collada, "torso" );
+        loader.load( 'objects/basin.dae',  function ( collada ) {
+            prepareCol( collada, "basin" );
         }, onProgress, onError );
-        loader.load( 'objects/arm_left.dae',  function ( collada ) {
-            prepareCol( collada, "arm_left" );
+        loader.load( 'objects/chest_front.dae', function ( collada ) {
+            prepareCol( collada, "chest_front" );
         }, onProgress, onError );
-        loader.load( 'objects/arm_right.dae', function ( collada ) {
-            prepareCol( collada, "arm_right" );
+        loader.load( 'objects/chest_back.dae',  function ( collada ) {
+            prepareCol( collada, "chest_back" );
         }, onProgress, onError );
-        loader.load( 'objects/leg_right.dae', function ( collada ) {
-            prepareCol( collada, "leg_right" );
+        loader.load( 'objects/belly_front.dae', function ( collada ) {
+            prepareCol( collada, "belly_front" );
         }, onProgress, onError );
-        loader.load( 'objects/leg_left.dae', function ( collada ) {
-            prepareCol( collada, "leg_left" );
+        loader.load( 'objects/belly_back.dae',  function ( collada ) {
+            prepareCol( collada, "belly_back" );
         }, onProgress, onError );
+        loader.load( 'objects/lowerLeg_right.dae', function ( collada ) {
+            prepareCol( collada, "lowerLeg_right" );
+        }, onProgress, onError );
+        loader.load( 'objects/lowerLeg_left.dae', function ( collada ) {
+            prepareCol( collada, "lowerLeg_left" );
+        }, onProgress, onError );
+        loader.load( 'objects/knee_left.dae',  function ( collada ) {
+            prepareCol( collada, "knee_keft" );
+        }, onProgress, onError );
+        loader.load( 'objects/knee_right.dae', function ( collada ) {
+            prepareCol( collada, "knee_right" );
+        }, onProgress, onError );
+        loader.load( 'objects/upperLeg_right.dae',  function ( collada ) {
+            prepareCol( collada, "upperLeg_right" );
+        }, onProgress, onError );
+        loader.load( 'objects/upperLeg_left.dae', function ( collada ) {
+            prepareCol( collada, "upperLeg_left" );
+        }, onProgress, onError );
+        loader.load( 'objects/upperArm_right.dae', function ( collada ) {
+            prepareCol( collada, "upperArm_right" );
+        }, onProgress, onError );
+        loader.load( 'objects/upperArm_left.dae', function ( collada ) {
+            prepareCol( collada, "upperArm_left" );
+        }, onProgress, onError );
+        loader.load( 'objects/lowerArm_left.dae',  function ( collada ) {
+            prepareCol( collada, "lowerArm_left" );
+        }, onProgress, onError );
+        loader.load( 'objects/lowerArm_right.dae', function ( collada ) {
+            prepareCol( collada, "lowerArm_right" );
+        }, onProgress, onError );
+
 
         renderer = new THREE.WebGLRenderer();
         renderer.setPixelRatio(window.devicePixelRatio);
