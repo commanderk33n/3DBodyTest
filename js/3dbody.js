@@ -36,19 +36,7 @@ var init = function(containerId) {
             light4.position.set(50,-150,100);
             scene.add(light4);
 
-        // Controls
-        controls = new THREE.TrackballControls( camera );
-        controls.rotateSpeed = 1.2;
-        controls.zoomSpeed = 0.8;
-        controls.panSpeed = 0.4;
-        controls.noZoom = false;
-        controls.noPan = false;
-        controls.staticMoving = true;
-        controls.dynamicDampingFactor = 0.3;
-        controls.minDistance = 10;
-        controls.maxDistance = 55;
-        controls.keys = [ 65, 83, 68 ];
-        controls.addEventListener( 'change', render );
+
 
         // Model
         var onProgress = function ( xhr ) {
@@ -86,16 +74,25 @@ var init = function(containerId) {
         renderer.setSize(800, 800);
         renderer.setClearColor(0xffffff, 1);
         container.appendChild(renderer.domElement);
-
-
-
-
         document.addEventListener("click", onClick, false);
+
+        // Controls
+        controls = new THREE.TrackballControls(camera, renderer.domElement);
+        controls.rotateSpeed = 1.2;
+        controls.zoomSpeed = 0.8;
+        controls.panSpeed = 0.4;
+        controls.noZoom = false;
+        controls.noPan = false;
+        controls.staticMoving = true;
+        controls.dynamicDampingFactor = 0.3;
+        controls.minDistance = 10;
+        controls.maxDistance = 55;
+        controls.addEventListener( 'change', render );
+
         raycaster = new THREE.Raycaster();
         mouse = new THREE.Vector2();
         activColor = new THREE.Color(0.55,0.14,0.14);
         normalColor = new THREE.Color(1,0.83,0.61);
-      
         animate();
     }
 
