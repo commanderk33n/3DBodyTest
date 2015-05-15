@@ -17,10 +17,10 @@ var init = function(containerId) {
         scene.add(camera);
         camera.lookAt(new THREE.Vector3(0,0,0));
 
-        // Helpers
+  /*      // Helpers
         //axes
         var axes = new THREE.AxisHelper(100);
-        scene.add(axes);
+        scene.add(axes);   */
 
         // Lights
         var light;
@@ -104,13 +104,13 @@ var init = function(containerId) {
             prepareCol( collada, "lowerArm_right" );
         }, onProgress, onError );
 
-
+        // Renderer
         renderer = new THREE.WebGLRenderer();
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(800, 800);
         renderer.setClearColor(0xffffff, 1);
         container.appendChild(renderer.domElement);
-        document.addEventListener("click", onClick, false);
+
 
         // Controls
         controls = new THREE.TrackballControls(camera, renderer.domElement);
@@ -124,6 +124,7 @@ var init = function(containerId) {
         controls.minDistance = 10;
         controls.maxDistance = 55;
         controls.addEventListener( 'change', render );
+        document.addEventListener("click", onClick, false);
 
         raycaster = new THREE.Raycaster();
         mouse = new THREE.Vector2();
